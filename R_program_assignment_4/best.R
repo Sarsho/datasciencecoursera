@@ -61,7 +61,9 @@ best <- function(state, outcome){
       
       outcomes_df <- outcomes_df[order(outcomes_df[,2], outcomes_df[,3],
                                  outcomes_df[,1]),]
-      head(outcomes_df, 20)
+      
+      outcomes_df <- subset(outcomes_df, outcomes_df[[2]]==state)
+      outcomes_df[1,1]
 }
 
 setwd(owd)
