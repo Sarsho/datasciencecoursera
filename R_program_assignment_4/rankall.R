@@ -12,9 +12,8 @@ setwd(paste(getwd(), "/", "R_program_assignment_4","/", sep = ""))
 outcomes_df <- read.table("outcome-of-care-measures.csv", header = TRUE, sep = ",",
            na.strings = "Not Available", stringsAsFactors = FALSE)
 
-## rankhospital function takes arguments for the state name (abbreviation), the 
-## mortality outcome, and its rank and returns the name of the state hospital 
-## with the best, worst or defined rank rate.
+## best function takes arguments for the state name (abbreviation) and the mortality
+## outcome type and returns the name of the state hospital with the lowest rate.
 rankhospital <- function(state, outcome, num){
       
       ## sets up the validation criteria based on knowledge of the data
