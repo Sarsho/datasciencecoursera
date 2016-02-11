@@ -1,4 +1,4 @@
-## Coursera R-Programming wk 4 Assignment 3, part 3
+## Coursera R-Programming wk 4 Assignment 3, part 4
 ## Austin Overman
 
 
@@ -12,17 +12,15 @@ setwd(paste(getwd(), "/", "R_program_assignment_4","/", sep = ""))
 outcomes_df <- read.table("outcome-of-care-measures.csv", header = TRUE, sep = ",",
            na.strings = "Not Available", stringsAsFactors = FALSE)
 
-## best function takes arguments for the state name (abbreviation) and the mortality
-## outcome type and returns the name of the state hospital with the lowest rate.
-rankhospital <- function(state, outcome, num){
+## rankall function takes arguments for the the mortality type and its rate
+## rank and returns a list of hospital names and their states for the defined
+## mortality type and ranked rate.
+rankall <- function(outcome, num = "best"){
       
       ## sets up the validation criteria based on knowledge of the data
-      states <- unique(outcomes_df[,7][duplicated(outcomes_df[,7])])
       outcomes <- c("heart attack" = 11, "heart failure" = 17, "pneumonia" = 23)
       
-      ## detemines if the state and outcome argument are valid in the data
-      if(is.element(state, states) == FALSE) 
-            stop("invalid state")
+      ## detemines if the outcome argument is valid in the data
       if(outcome %in% names(outcomes) == FALSE)
             stop("invalid outcome")
       
@@ -33,17 +31,19 @@ rankhospital <- function(state, outcome, num){
       ## index: 1 = Hospital, 2 = State, 3 = rate
       outcomes_df <- outcomes_df[order(outcomes_df[,2], outcomes_df[,3],
                                  outcomes_df[,1]),]
-      
-      ## subsets outcomes to just the state function argument
-      outcomes_df <- subset(outcomes_df, outcomes_df[[2]]==state)
-      
-      ## assigns index values for num if option is 'best' or 'worst'
-      if(num == "best") num <- 1
-      if(num == "worst") num <- nrow(outcomes_df)
-      
-      ## returns the name of the hospital in the defined state and rank
-      outcomes_df[num,1]
      
+      
+      split_outcomes <- split(outcomes_df, outcomes_df$State)
+      hospital_name <- unlist(lapply(split_outcomes, function(rank){
+            if(num == "best") num <- 1
+            if(num == "worst") num <- nrow(rank)
+            rank[num,1]
+            })) 
+      state_name <- names(hospital_name)
+      all_ranked <- data.frame(hospital=hospital_name, state=state_name, 
+                               row.names=state_name)
+      all_ranked
 }
+
 
 setwd(owd)
