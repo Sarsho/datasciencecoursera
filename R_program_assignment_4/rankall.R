@@ -32,7 +32,8 @@ rankall <- function(outcome, num = "best"){
       outcomes_df <- outcomes_df[order(outcomes_df[,2], outcomes_df[,3],
                                  outcomes_df[,1]),]
      
-      
+      ## the ordered data are split peer state creating a vector of
+      ## hospital names and the state for their specified rate/rank
       split_outcomes <- split(outcomes_df, outcomes_df$State)
       hospital_name <- unlist(lapply(split_outcomes, function(rank){
             if(num == "best") num <- 1
